@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!-- lqns -->
+<lqn-model name="lqnDICE" description="lqns 5.7 solution for model from: lqnDICE.lqnx." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///C:/Program Files/LQN Solvers/lqn.xsd">
+   <solver-params comment="" conv_val="1e-006" it_limit="50" underrelax_coeff="0.9" print_int="0">
+      <result-general valid="YES" conv-val="9.08633e-007" iterations="18" platform-info="" user-cpu-time="00:00:00.00" system-cpu-time="00:00:00.00" elapsed-time="00:00:00.00">
+         <mva-info submodels="3" core="54" step="327" step-squared="2307" wait="4614" wait-squared="902988" faults="0"/>
+      </result-general>
+   </solver-params>
+   <processor name="Server_Spout" scheduling="fcfs" multiplicity="2">
+      <result-processor utilization="0.597649"/>
+      <task name="WikiArticleSpout" scheduling="ref" multiplicity="12" think-time="40" queue-length="0">
+         <result-task throughput="0.284595" utilization="0.616216" phase1-utilization="0.578473" phase2-utilization="0.0377431" proc-utilization="0.597649"/>
+         <entry name="StrartPoint" type="PH1PH2">
+            <result-entry utilization="0.616216" throughput="0.284595" squared-coeff-variation="0.855781" proc-utilization="0.597649" throughput-bound="0.285036"/>
+            <entry-phase-activities>
+               <activity name="OpaqueAction1" phase="1" host-demand-mean="2">
+                  <result-activity proc-waiting="0.0326204" service-time="2.03262" utilization="0.578473" service-time-variance="4.00106"/>
+               </activity>
+               <activity name="CallOperationAction6" phase="2" host-demand-mean="0.1">
+                  <result-activity proc-waiting="0.0326204" service-time="0.13262" utilization="0.0377431" service-time-variance="0.0110641"/>
+                  <asynch-call dest="AcceptEventAction3" calls-mean="1">
+                     <result-call waiting="4.53767"/>
+                  </asynch-call>
+               </activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor name="Server_Link1" scheduling="fcfs" multiplicity="2">
+      <result-processor utilization="0.910703"/>
+      <task name="LinkCounterBolt" scheduling="fcfs" multiplicity="2" queue-length="0">
+         <result-task throughput="0.284595" utilization="0.910703" phase1-utilization="0.882243" phase2-utilization="0.0284595" proc-utilization="0.910703"/>
+         <entry name="AcceptEventAction3" type="PH1PH2">
+            <result-entry utilization="0.910703" throughput="0.284595" squared-coeff-variation="0.939453" proc-utilization="0.910703" throughput-bound="0.625"/>
+            <entry-phase-activities>
+               <activity name="OpaqueAction4" phase="1" host-demand-mean="3.1">
+                  <result-activity proc-waiting="0" service-time="3.1" utilization="0.882243" service-time-variance="9.61"/>
+               </activity>
+               <activity name="CallOperationAction3" phase="2" host-demand-mean="0.1">
+                  <result-activity proc-waiting="0" service-time="0.1" utilization="0.0284595" service-time-variance="0.01"/>
+                  <asynch-call dest="AcceptEventAction4" calls-mean="1">
+                     <result-call waiting="13.1064"/>
+                  </asynch-call>
+               </activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+   <processor name="Server_Link2" scheduling="fcfs">
+      <result-processor utilization="0.910703"/>
+      <task name="LinksPerPageCassandraWriter" scheduling="fcfs" multiplicity="2" queue-length="0">
+         <result-task throughput="0.284595" utilization="1.49764" phase1-utilization="1.49764" proc-utilization="0.910703"/>
+         <entry name="AcceptEventAction4" type="PH1PH2">
+            <result-entry utilization="1.49764" throughput="0.284595" squared-coeff-variation="0.523368" proc-utilization="0.910703" throughput-bound="0.625"/>
+            <entry-phase-activities>
+               <activity name="OpaqueAction5" phase="1" host-demand-mean="3.2">
+                  <result-activity proc-waiting="2.06236" service-time="5.26236" utilization="1.49764" service-time-variance="14.4933"/>
+               </activity>
+            </entry-phase-activities>
+         </entry>
+      </task>
+   </processor>
+</lqn-model>

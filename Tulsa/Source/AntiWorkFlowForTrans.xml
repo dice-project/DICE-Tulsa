@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<project default="main" >
+	<target name="loadModels">
+		<epsilon.emf.loadModel 
+	 			        name="UML" 
+	 			        modelFile="AntBuildfile/SourceModel/Tulsa_Example.uml" 		      
+	 			 	    metamodelUri="http://www.eclipse.org/uml2/5.0.0/UML"
+	 				    read="true" store="true"/>
+		<epsilon.emf.register file="AntBuildfile/MetaModels/lqnmodel.ecore"/>
+		<epsilon.emf.register file="AntBuildfile/MetaModels/Lqn2umlTrace.ecore"/>
+
+		<epsilon.emf.loadModel name="lqnmodel"
+			                               modelFile="AntBuildfile/TargetModels/TargetDICELqn.model"
+	                                       metamodelUri="lqnmodel"
+	                                       read="false" store="true" />		
+
+		<epsilon.emf.loadModel name="Trace"
+		                                       modelFile="AntBuildfile/TargetModels/TraceDICELqn.model"
+		                                       metamodelUri="Lqn2umlTrace"
+		                                       read="false" store="true"/>
+	</target>
+	<target name="targetModels" depends="loadModels">
+		<epsilon.eol src="AntBuildfile/PreTrans.eol">
+			<model ref="UML" />
+		</epsilon.eol>
+		<epsilon.etl src="AntBuildfile/MainTrans.etl" >
+			<model ref="UML"/>
+			<model ref="lqnmodel" />
+			<model ref="Trace" />
+		</epsilon.etl>		   
+		<epsilon.storeModel model="lqnmodel"/>
+	</target>
+	
+	<target name="main" depends="targetModels">
+
+		<java   classname="labelReplacement.LabelRep" classpath="bin">
+			<arg value="C:\Users\lcroy\git\DICE-Enhancement-APR\Tulsa\V1\AntBuildfile\TargetModels\TargetDICELqn.model"/>
+			
+			<arg file="C:\Users\lcroy\git\DICE-Enhancement-APR\Tulsa\V1\AntBuildfile\TargetModels\lqnDICE.lqnx"/>
+		</java>
+	</target>
+
+</project>
+

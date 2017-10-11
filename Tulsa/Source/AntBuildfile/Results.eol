@@ -1,0 +1,236 @@
+	
+var processors=X!`t_result-processor`.all;
+var links= X!t_links.all; 
+//var umlDevices = X!`t_UML!Device.all`;
+ "results for processor ".print();
+for(i in processors){
+   i.parentNode.a_name.print()+" utilization = " .print()+i.a_utilization .asReal().println() ;
+ // "tagName".print() + i.parentNode.tagName.println();
+ //  "tagattribute".print()+i.getAttributeNode(i.parentNode.tagName).println();
+ var utilization :Real= i.a_utilization .asReal();
+   utilization.type().println();
+ for(s in links){
+   if (s.a_targets=i.parentNode.a_name){ //--1--
+     var vSources=s.a_sources; 
+         "The source is ".print()+vSources.println() ;  
+          UML!Device.all.print();
+        for (v in UML!Device.all){
+             "Device ".print()+ v.name.println();
+            if (v.name=vSources){//--2--
+        	   var stereotype:Any=v.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="GaExecHost"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	v.setValue(s,"utilization",Sequence{utilization+""});
+	                                
+                    }--4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//devices loop end
+    }--1--if--end
+   }//processors links loop end
+  var tasks = i.parentNode.children.select(a|a.tagName = "task");
+ for(t in tasks){
+   "The task name is ".print()+t.a_name.println();
+	 var resTasks= t.children.selectOne(a|a.tagName="result-task");
+    	"Throughput = ".print()+resTasks.a_throughput.println();
+		"utilization = ".print()+resTasks.a_utilization.println;
+		"phase1-utilization = ".print()+resTasks.`a_phase1-utilization`.println();//remove - from here and from lqnSep17.xml as it causes error
+		"phase2-utilization = ".print()+resTasks.`a_phase2-utilization`.println();
+		"phase3-utilization = ".print()+resTasks.`a_phase3-utilization`.println();
+		"proc-utilization = ".print()+resTasks.`a_proc-utilization`.println();
+    for (s in links){ 
+         if (s.a_targets=t.a_name){ --if task--
+          var vSources=s.a_sources;
+          "The source is ".print()+vSources.println();
+          
+          //UML!Artifact.all.print();
+        for (r in UML!Artifact.all){
+             "Artifact ".print()+ r.name.println();
+            if (r.name=vSources){//--2--
+        	   var stereotype:Any= r.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="Scheduler"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 //	r.setValue(s,"utilization",Sequence{utilization+""});//no same attributes in the stereotype
+	                                
+                    }--4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//Artifact loop end
+          }--if task end
+    }---task links end 
+       var entries = t.children.select(a|a.tagName = "entry");//for each task get entries
+for(e in entries){
+"The entry name is : ".print()+e.a_name.println();
+var resEntries= e.children.selectOne(a|a.tagName="result-entry");
+	"Utilization = ".print()+resEntries.a_utilization.print();
+	   var entryUtilization :Real= resEntries.a_utilization .asReal();
+	"throughput = ".print()+resEntries.a_throughput.println();
+		var entryThroughput :Real= resEntries.a_throughput.asReal();
+    "squared-coeff-variation = ".print()+resEntries.`a_squared-coeff-variation`.println();//in Marte is utilizationOnHost
+	"proc-utilization = ".print()+resEntries.`a_proc-utilization`.println();
+	//resEntries.`a_proc-utilization`.type().println();
+		var procUtilization :Real= resEntries.`a_proc-utilization`.asReal();
+		"testtttt ".print()+procUtilization.println();
+	"throughput-bound = ".print()+resEntries.`a_throughput-bound`.println();
+  for (s in links){ 
+     if (s.a_targets=e.a_name){--if entry 
+          var vSources=s.a_sources;
+          "The source is ".print()+vSources.println();
+           for (c in UML!AcceptEventAction.all){
+             "AcceptEventAction ".print()+ c.name.println();
+            if (c.name=vSources){//--2--
+        	   var stereotype:Any= c.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="GaStep"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	c.setValue(s,"utilization",Sequence{entryUtilization+""});
+	                 	c.setValue(s,"throughput",Sequence{entryThroughput+""});
+	                    c.setValue(s,"utilizationOnHost",Sequence{procUtilization+""}); //in Marte is utilizationOnHost           
+                    } --4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//AcceptEventAction loop end
+       for (c in UML!InitialNode.all){
+             "InitialNode ".print()+ c.name.println();
+            if (c.name=vSources){//--2--
+        	   var stereotype:Any= c.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="GaStep"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	c.setValue(s,"utilization",Sequence{entryUtilization+""});
+	                 	c.setValue(s,"throughput",Sequence{entryThroughput+""});
+	                 	c.setValue(s,"utilizationOnHost",Sequence{procUtilization+""});            
+	                                
+                    } --4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//initial node loop end
+     }--if entry
+  }--entry links loop end
+  var Eactivities= e.children.select(a|a.tagName ="entry-phase-activities" );//get activites for each entry
+  var Tactivities= t.children.select(a|a.tagName="task-activities");
+  var activities1:Sequence;
+  var activities2:Sequence;
+  var activities:Set;
+  for (E in Eactivities){ //---for loop1  
+       activities1=E.children.select(a|a.tagName = "activity"); 
+  }//---end of loop1
+  activities.addAll(activities1);
+  for (T in Tactivities){
+         activities2=T.children.select(a|a.tagName = "activity"); 
+  }
+  activities.addAll(activities2);
+  " activities set is : ".print()+ activities.a_name.println();
+  
+      //for (E in activities){ //---for loop1
+       
+       //var activities= E.children.select(a|a.tagName = "activity");                  
+     //  var activities1= t.children.select(a|a.tagName="task-activities"); 
+     for (v in  activities  ){ //--loop2
+         "The activity name is : ".print()+ v.a_name.println();
+  		var taskThroughput :Real ;  
+  		var procUtilization :Real	;	
+        var resActivity= v.children.selectOne(a|a.tagName="result-activity");
+           "proc-waiting = ".print()+resActivity.`a_proc-waiting`.println();
+	       "service-time= ".print()+resActivity.`a_service-time`.println();//in Marte respT
+	         var activityServicetime :Real= resActivity.`a_service-time`.asReal();
+            "utilization = ".print()+resActivity.`a_utilization`.println();
+            var activityUtilization :Real= resActivity.a_utilization .asReal();
+	        "service-time-variance= ".print()+resActivity.`a_service-time-variance`.print();
+	     	 "throughput = ".print()+resActivity.a_throughput.println();
+	     	 "proc-utilization = ".print()+resActivity.`a_proc-utilization`.println();
+	     	 if (resActivity.a_throughput.isDefined ){
+	     	     taskThroughput = resActivity.a_throughput.asReal();}
+	     	 else {taskThroughput=null;}  
+	     	 if (resActivity.`a_proc-utilization`.isDefined){
+	     	    procUtilization = resActivity.`a_proc-utilization`.asReal();}
+	     	  else {procUtilization=null;}  
+     //to get the source for each entry
+ for (s in links){//--activities links loop
+	if (s.a_targets=v.a_name){ //--if end
+       var vSources=s.a_sources;
+         "The source is ".print()+vSources.println();
+         for (c in UML!CallOperationAction.all){//CallOperationAction loop 
+             "CallOperationAction ".print()+ c.name.println();
+            if (c.name=vSources){//--2--
+        	   var stereotype:Any= c.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="GaStep"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	c.setValue(s,"utilization",Sequence{activityUtilization+""});
+	                 	c.setValue(s,"utilizationOnHost",Sequence{procUtilization+""});
+	                   	c.setValue(s,"respT",Sequence{activityServicetime+""});//in Marte respT
+	                 		                                
+                    } --4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//CallOperationActionloop end
+        for (c in UML!OpaqueAction.all){//OpaqueAction loop 
+             "OpaqueAction ".print()+ c.name.println();
+            if (c.name=vSources){//--2--
+        	   var stereotype:Any= c.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if((s.name="StormSpout")or(s.name="StormBolt")){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	c.setValue(s,"utilization",Sequence{activityUtilization+""});
+	                    c.setValue(s,"throughput",Sequence{taskThroughput+""});	
+	                    c.setValue(s,"utilizationOnHost",Sequence{procUtilization+""}); 
+	                 	c.setValue(s,"respT",Sequence{activityServicetime+""});
+	                 		                                
+                    } --4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//OpaqueAction loop end
+        for (c in UML!SendSignalAction.all){//SendSignalAction loop 
+             "SendSignalAction ".print()+ c.name.println();
+            if (c.name=vSources){//--2--
+        	   var stereotype:Any= c.getAppliedStereotypes();
+	            "stereotypes are : ".print()+stereotype.println(); 
+        	   if(stereotype.isDefined()){ //--3--
+        	      for(s in stereotype){           
+	     	       if(s.name="PaStep"){//--4--
+	    	    	    "Selected Attributes are :".print()+s.getAllAttributes().name.println();
+	    	 	        //if(s.getAllAttributes().selectOne(a|a.name="Utilization").isDefined()){}
+	                 	c.setValue(s,"utilization",Sequence{activityUtilization+""});
+	                 	c.setValue(s,"throughput",Sequence{taskThroughput+""});
+                        c.setValue(s,"utilizationOnHost",Sequence{procUtilization+""}); 
+	                 	c.setValue(s,"respT",Sequence{activityServicetime+""});
+	                 		                                
+                    } --4--if--end
+                 }--stereotype loop end	           
+	          } --3-if--end
+           } //--2--if--end   
+       }//SendSignalAction end
+                   }//--if end
+  }   //--activities links loop end  
+        }//--for loop2 end    
+ //}//--for loop1 end 
+ }--entry loop end 
+ }--task loop end   
+}//processors loop end

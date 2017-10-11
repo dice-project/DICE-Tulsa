@@ -1,0 +1,70 @@
+//Add inPartition property to ControlFlows which their "source" and "target" are the same 
+
+//Check if Model is defined
+UML!Model.isDefined().println();
+UML!Model.isUndefined().println();
+
+//Print all models
+var umlModelNumber:Integer=0;
+for(umlModel in UML!Model.all){
+	umlModelNumber = umlModelNumber + 1;
+	"This is the Model ".print() + umlModelNumber.print()+" ".print() + umlModel.println();	
+}
+
+//Check if Activity Partition is defined 
+UML!ActivityPartition.isDefined().println();
+UML!ActivityPartition.hasProperty("name").println();
+
+//Print all Activity Partitions 
+var umlActivityPartition: Collection=UML!ActivityPartition.all;
+var umlNodes: Collection;
+for(uAP in umlActivityPartition){
+	uAP.name.println();
+	umlNodes = uAP.node;
+	for (uN in umlNodes){
+		uN.println();
+	}
+}
+
+//Check if Control Flow is defined
+UML!ControlFlow.isDefined().println();
+UML!ControlFlow.isUndefined().println();
+
+//Print all Control Flows
+var umlControlFlowNumber:Integer=0;
+for(umlControlFlow in UML!ControlFlow.all){
+	umlControlFlowNumber = umlControlFlowNumber + 1;
+	umlControlFlow.name = umlControlFlowNumber.toString();
+	umlControlFlowNumber.print()+" ".print() + umlControlFlow.println();		
+}
+
+//Choose all ControlFlows which within the same partition
+var InPartitionCF: Collection = UML!ControlFlow.all.select(c|c.source.inPartition = c.target.inPartition);
+InPartitionCF.type().println();
+//Test:Start
+//Choose all ControlFlows which cross partitions
+//var InPartitionCF: Collection=UML!ControlFlow.all.select(c|c.source.inPartition<>c.target.inPartition);
+//InPartitionCF.type().println();
+//Test:end
+
+//Add inPartition property to ControlFlows
+var umlControlFlowNumber:Integer=0;
+for(ipcf in InPartitionCF){
+
+	umlControlFlowNumber = umlControlFlowNumber + 1;
+	umlControlFlowNumber.print() + " ".print() + ipcf.println();
+	
+	//print the partition of the source of the control flow
+	ipcf.source.inPartition.println();
+	
+	//print the partition of the control flow
+	ipcf.inPartition.println();
+	
+	//Writing the inPartition property to control flow
+	
+	ipcf.inPartition = ipcf.source.inPartition;
+	
+	//print the partition of the control flow
+	ipcf.inPartition.println();
+		
+}

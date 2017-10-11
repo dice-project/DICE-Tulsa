@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Lqn2umlTrace:Trace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Lqn2umlTrace="Lqn2umlTrace">
+  <links sources="RootElement" targets="RootElement To lqn" description="Transformed by Model2Lqnmodel"/>
+  <links sources="Server_Spout" targets="Server_Spout" description="Transformed by Device2processor"/>
+  <links sources="WikiArticleSpout" targets="WikiArticleSpout" description="Transformed by Artifact2task"/>
+  <links sources="StrartPoint" targets="StrartPoint" description="Transformed by InitialNode2entryPh1Ph2"/>
+  <links sources="OpaqueAction1" targets="OpaqueAction1" description="Transformed by OpaqueAction2Activity"/>
+  <links sources="CallOperationAction6" targets="CallOperationAction6" description="Transformed by CallOperationAction2Activity"/>
+  <links sources="3" targets="" description="Transformed by ControlFlow2asynchcall"/>
+  <links sources="Server_Link1" targets="Server_Link1" description="Transformed by Device2processor"/>
+  <links sources="LinkCounterBolt" targets="LinkCounterBolt" description="Transformed by Artifact2task"/>
+  <links sources="AcceptEventAction3" targets="AcceptEventAction3" description="Transformed by AcceptEventAction2entryPh1Ph2"/>
+  <links sources="OpaqueAction4" targets="OpaqueAction4" description="Transformed by OpaqueAction2Activity"/>
+  <links sources="CallOperationAction3" targets="CallOperationAction3" description="Transformed by CallOperationAction2Activity"/>
+  <links sources="7" targets="" description="Transformed by ControlFlow2asynchcall"/>
+  <links sources="Server_Link2" targets="Server_Link2" description="Transformed by Device2processor"/>
+  <links sources="LinksPerPageCassandraWriter" targets="LinksPerPageCassandraWriter" description="Transformed by Artifact2task"/>
+  <links sources="AcceptEventAction4" targets="AcceptEventAction4" description="Transformed by AcceptEventAction2entryPh1Ph2"/>
+  <links sources="OpaqueAction5" targets="OpaqueAction5" description="Transformed by OpaqueAction2Activity"/>
+</Lqn2umlTrace:Trace>
